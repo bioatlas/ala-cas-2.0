@@ -2,16 +2,22 @@ language: java
 jdk:
 - openjdk8
 sudo: false
-branches:
-  only:
-  - master
 cache:
   directories:
     - ~/.m2/repository
 before_install:
-- mkdir -p ~/.m2; wget -q -O ~/.m2/settings.xml https://raw.githubusercontent.com/AtlasOfLivingAustralia/travis-build-configuration/master/travis_maven_settings_simple.xml
-script: mvn clean install deploy
-env:
-  global:
-  - secure: CRXDKMWfWv4rEzwg4TWls/nAE5ej7sKrXIDVHCLBUjGHKr+xzV2oed4nblVbnnLrcZf6jgAJAT+cbEf5doREseHXIPUxplhgsCWGE+wEvBsjutI1YuSIS16jjzJSA+xz9p2ivPIDZZCzjPTjaLddPMXhYuZRGvCyw4ps7hzdfHFsUDdQMDK5vyiw90Dz64Yhj+IDjaJHGBS94+Yp2OPz1ymVX+qqdQY5WkHAes23IFr+oQHTN2MY2Vu2zGdV39OQXba/DCBqiq4f2WdYWquESMx3k26KK9LzJaNU5wvXn4nWOtKCFmcOr7smtszfTeqt9MsgRn5qxaC8ZJp8R48MizbqONrP3vDQ23/btyVGkA7hvGBDkgSRd81IFOdsH6jdha4/4Lru3a9ocxnNf5suLSVctk/uUcFxgyXWYdDaT3FnQPAuU/GbMQgZYIqJIzNbA+swpRtSBJv8qz7vQMioCRhoC2Dhfhg/MR5irEuwcyXDHNTp80/7+PfGEQy71R0oTXzlprB1m3wDggUUjkPBZp2KlDrEvsSHjXXCe1zMaJiZdbzvRvQEDf+ZR5/Rw8crCxvMtdyuq1p5gjoi3MO9mYCQx5qy8ah+2ApFR6r9jr+xdY2cJglhk1g1dUU2xFVdCuEK1mUd1qJ7R4zYQsUrL+PCnf7uz7A7hLqaTxeYrP4=
-  - secure: xGCSU5JhO33L826YymHqdjlZRcXwL+myQiMRvlMAOokIKe5ztqaPD0ZbcqHO0qwPIQYGdKlLqa4LIgXruEpnOf8dllqj6gqY/ZcAnDyDgBxsbUKT/OEaM6dTeargWxTKIKEXX55xVXLlvBZE/JRi0hA9lb48QOOHFWrRUotiXt3u3lDJqP2HvfMR/L7MSbT2FJGYoCMnQIgi0uI52S1K3nxVQgcAzANGWz30WBUBxSIuFDeEedkSqn101RAkxhw20JPiLfaEgZd0yl6NwMJRNshDRlAFInb4xJC3G2MRmt2D8pIyEh7byi7pLhARSvgmhSctcAPF8EbD9FXN5dGQbN5CEH4dtXJNVp3SN7NsUi+q77zay/31jBnW7uNLdcscvYOwrL+2EOf4WGWagcPT4Ia90ThZ912j0u4mQ061D2w66626AqiDGY1T+lfehSaH+KVt/0GqJCy8263oaVnOZgpOs2O/p8nY7f2WJgs3yNSLBO156I0CwYodRrpXEjDv7XPRBSlUzpkPpXy/2iaJA5XXRaMDSj0PaaUrG1UIp7eHPEDnBRO/xCyxfU4PqrhGGs4rzTB+e6jiC1OUGVtGhAr9ON8MCOM/WhaVJuHhlr3Cwh6qetU5uv4i1ioVlrM9aoDdRckBAbu3itb5fbgMhhsvU1/VoX2Akx3YW+g1sI4=
+  - mkdir -p ~/.m2
+install:
+  - mvn clean package -DskipTests
+deploy:
+  provider: releases
+  api_key:
+    secure: GwHGHOueFdS0z02Z8cVc7cGFfFqUqR+QiZ/VrD0h0ssSPgVvMfmljtXLNGoA8oXr6kTwg4vPTDmoj6u7uymsYeUPptMj62MmF+i463Nvw7TMvR5u4XvKHbnrBXEvvizS4swsjpKFDyjm2AgENz7X5y0ekiZ/GfWoj3UwuNBxr1Fg0cW9CDv/10wNi/+sKb6Aotf1beZf5ze9V7nQbGwwptU3E6PYCTzqdYb1ZxKXivOG27UBcYJoJrD1jo0sCmrR7c/T7lbsrRLs2cv6QVZUrfC6D2+gYxlFV6HDGo7hkHHybbxbQ2M9dco0Sw2H0ovcSs/Vy5IsRRH/QLYIvpIiQm15dh8zGijExC7IRa8Hr5iLrDraoiHKBuo2uRFnyXNKpvLu/jldW0kl9ErADgx5m44T44L1s72Ul2/CnQZgNlotndEXSo275GGtgN6CPF+8lEF1VmUgnWgYauDBoraD+eve/uCvtvSgaU6n7EQgmaLP4ldlJgRyU3Yx36Z6Y1XDJDZumbqgqZ9otkHrxmiNyioiG937l27wQWpAXGdyaq5RGsWVfmONxjbsI8VbSgFdw6ay27L/54Th0WucDq3WMSlMTPfyNh9xVA7psRECsSM4A6JWmP7Rea6wAnOLAHInP+R4+xFyGqzcafk7oLMJuFaikhrfAqkjR1gLknrML98=
+  file: "target/cas*.war"
+  file_glob: true
+  skip_cleanup: true
+  overwrite: true
+  on:
+    repo: bioatlas/ala-cas-2.0
+    all-branches: true
+    tags: true
